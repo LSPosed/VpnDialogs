@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?><!--suppress AndroidDomInspection -->
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    package="com.android.vpndialogs">
+
+    <uses-permission
+        android:name="android.permission.CONTROL_VPN"
+        tools:ignore="ProtectedPermissions" />
+    <uses-permission
+        android:name="android.permission.HIDE_NON_SYSTEM_OVERLAY_WINDOWS"
+        tools:ignore="ProtectedPermissions" />
+    <uses-permission
+        android:name="android.permission.QUERY_ALL_PACKAGES"
+        tools:ignore="QueryAllPackagesPermission" />
+
+    <application
+        android:allowBackup="false"
+        android:label="VpnDialogs"
+        android:usesNonSdkApi="true"
+        tools:ignore="DataExtractionRules,MissingApplicationIcon">
+
+        <activity
+            android:name=".ConfirmDialog"
+            android:exported="true"
+            android:theme="@*android:style/Theme.DeviceDefault.Dialog.Alert.DayNight">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+
+        <activity
+            android:name=".PlatformVpnConfirmDialog"
+            android:excludeFromRecents="true"
+            android:exported="true"
+            android:noHistory="true"
+            android:theme="@*android:style/Theme.DeviceDefault.Dialog.Alert.DayNight" />
+
+        <activity
+            android:name=".ManageDialog"
+            android:excludeFromRecents="true"
+            android:exported="true"
+            android:noHistory="true"
+            android:permission="android.permission.NETWORK_SETTINGS"
+            android:theme="@*android:style/Theme.DeviceDefault.Dialog.Alert.DayNight" />
+
+        <activity
+            android:name=".AlwaysOnDisconnectedDialog"
+            android:excludeFromRecents="true"
+            android:exported="true"
+            android:label="@string/always_on_disconnected_title"
+            android:noHistory="true"
+            android:permission="android.permission.NETWORK_SETTINGS"
+            android:theme="@*android:style/Theme.DeviceDefault.Dialog.Alert.DayNight" />
+
+    </application>
+</manifest>

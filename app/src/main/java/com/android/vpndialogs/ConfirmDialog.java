@@ -73,7 +73,7 @@ public class ConfirmDialog extends AlertActivity
         View view = View.inflate(this, R.layout.confirm, null);
         ((TextView) view.findViewById(R.id.warning)).setText(
                 Html.fromHtml(getString(R.string.warning, getVpnLabel()),
-                        Html.FROM_HTML_MODE_LEGACY, this, null /* tagHandler */));
+                        this, null /* tagHandler */));
         mAlertParams.mTitle = getText(R.string.prompt);
         mAlertParams.mPositiveButtonText = getText(android.R.string.ok);
         mAlertParams.mPositiveButtonListener = this;

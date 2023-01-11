@@ -4,8 +4,8 @@ plugins {
 
 android {
     namespace = "com.android.vpndialogs"
-    compileSdk = 32
-    buildToolsVersion = "32.0.0"
+    compileSdk 33
+    buildToolsVersion = '33.0.0'
     defaultConfig {
         minSdk = 30
         targetSdk = 32
@@ -32,13 +32,13 @@ android {
         buildConfig = false
     }
 
-    lintOptions {
-        checkReleaseBuilds = false
-    }
 
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_11
         targetCompatibility = JavaVersion.VERSION_11
+    }
+    lint {
+        checkReleaseBuilds false
     }
 }
 

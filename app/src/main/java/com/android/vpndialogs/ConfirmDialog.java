@@ -3,16 +3,11 @@ package com.android.vpndialogs;
 import static com.android.vpndialogs.Constant.ALWAYS_ON_VPN_APP;
 import static com.android.vpndialogs.Constant.TYPE_VPN_SERVICE;
 
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.pm.PackageManager;
 import android.graphics.drawable.Drawable;
-import android.net.IConnectivityManager;
 import android.net.VpnManager;
-import android.os.Build;
 import android.os.Bundle;
-import android.os.RemoteException;
-import android.os.ServiceManager;
 import android.os.UserManager;
 import android.provider.Settings;
 import android.text.Html;
@@ -37,7 +32,6 @@ public class ConfirmDialog extends AlertActivity
     private String mPackage;
 
     private VpnManager mVm;
-    private IConnectivityManager mService;
 
     public ConfirmDialog() {
         this(TYPE_VPN_SERVICE);
@@ -51,8 +45,6 @@ public class ConfirmDialog extends AlertActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mPackage = getCallingPackage();
-        mService = IConnectivityManager.Stub.asInterface(
-                ServiceManager.getService(Context.CONNECTIVITY_SERVICE));
         mVm = getSystemService(VpnManager.class);
 
         if (prepareVpn()) {
@@ -73,7 +65,7 @@ public class ConfirmDialog extends AlertActivity
         View view = View.inflate(this, R.layout.confirm, null);
         ((TextView) view.findViewById(R.id.warning)).setText(
                 Html.fromHtml(getString(R.string.warning, getVpnLabel()),
-                        this, null /* tagHandler */));
+                        Html.FROM_HTML_MODE_LEGACY, this, null /* tagHandler */));
         mAlertParams.mTitle = getText(R.string.prompt);
         mAlertParams.mPositiveButtonText = getText(android.R.string.ok);
         mAlertParams.mPositiveButtonListener = this;
@@ -90,14 +82,7 @@ public class ConfirmDialog extends AlertActivity
 
     private boolean prepareVpn() {
         var userId = Bridge.UserHandle_myUserId();
-        try {
-            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.S) {
-                return mService.prepareVpn(mPackage, null, userId);
-            }
-            return Bridge.VpnManager_prepareVpn(mVm, mPackage, null, userId);
-        } catch (RemoteException e) {
-            throw new IllegalStateException(e);
-        }
+        return Bridge.VpnManager_prepareVpn(mVm, mPackage, null, userId);
     }
 
     private CharSequence getVpnLabel() {
@@ -132,16 +117,9 @@ public class ConfirmDialog extends AlertActivity
     public void onClick(DialogInterface dialog, int which) {
         var userId = Bridge.UserHandle_myUserId();
         try {
-            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.S) {
-                if (mService.prepareVpn(null, mPackage, userId)) {
-                    mService.setVpnPackageAuthorization(mPackage, userId, mVpnType);
-                    setResult(RESULT_OK);
-                }
-            } else {
-                if (Bridge.VpnManager_prepareVpn(mVm, null, mPackage, userId)) {
-                    Bridge.VpnManager_setVpnPackageAuthorization(mVm, mPackage, userId, mVpnType);
-                    setResult(RESULT_OK);
-                }
+            if (Bridge.VpnManager_prepareVpn(mVm, null, mPackage, userId)) {
+                Bridge.VpnManager_setVpnPackageAuthorization(mVm, mPackage, userId, mVpnType);
+                setResult(RESULT_OK);
             }
         } catch (Exception e) {
             Log.e(TAG, "onClick", e);

@@ -1,15 +1,11 @@
 package com.android.vpndialogs;
 
-import android.content.Context;
 import android.content.DialogInterface;
-import android.net.IConnectivityManager;
 import android.net.VpnManager;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
-import android.os.ServiceManager;
 import android.os.SystemClock;
 import android.util.Log;
 import android.view.View;
@@ -32,7 +28,6 @@ public class ManageDialog extends AlertActivity implements
     private VpnConfig mConfig;
 
     private VpnManager mVm;
-    private IConnectivityManager mService;
 
     private TextView mDuration;
     private TextView mDataTransmitted;
@@ -47,14 +42,8 @@ public class ManageDialog extends AlertActivity implements
         var userId = Bridge.UserHandle_myUserId();
         try {
             mVm = getSystemService(VpnManager.class);
-            mService = IConnectivityManager.Stub.asInterface(
-                    ServiceManager.getService(Context.CONNECTIVITY_SERVICE));
 
-            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.S) {
-                mConfig = mService.getVpnConfig(userId);
-            } else {
-                mConfig = Bridge.VpnManager_getVpnConfig(mVm, userId);
-            }
+            mConfig = Bridge.VpnManager_getVpnConfig(mVm, userId);
 
             // mConfig can be null if we are a restricted user, in that case don't show this dialog
             if (mConfig == null) {
@@ -112,18 +101,10 @@ public class ManageDialog extends AlertActivity implements
                 mConfig.configureIntent.send();
             } else if (which == DialogInterface.BUTTON_NEUTRAL) {
                 final int myUserId = Bridge.UserHandle_myUserId();
-                if (Build.VERSION.SDK_INT < Build.VERSION_CODES.S) {
-                    if (mConfig.legacy) {
-                        mService.prepareVpn(VpnConfig.LEGACY_VPN, VpnConfig.LEGACY_VPN, myUserId);
-                    } else {
-                        mService.prepareVpn(mConfig.user, VpnConfig.LEGACY_VPN, myUserId);
-                    }
+                if (mConfig.legacy) {
+                    Bridge.VpnManager_prepareVpn(mVm, VpnConfig.LEGACY_VPN, VpnConfig.LEGACY_VPN, myUserId);
                 } else {
-                    if (mConfig.legacy) {
-                        Bridge.VpnManager_prepareVpn(mVm, VpnConfig.LEGACY_VPN, VpnConfig.LEGACY_VPN, myUserId);
-                    } else {
-                        Bridge.VpnManager_prepareVpn(mVm, mConfig.user, VpnConfig.LEGACY_VPN, myUserId);
-                    }
+                    Bridge.VpnManager_prepareVpn(mVm, mConfig.user, VpnConfig.LEGACY_VPN, myUserId);
                 }
             }
         } catch (Exception e) {

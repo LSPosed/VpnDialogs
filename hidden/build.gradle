@@ -4,11 +4,11 @@ plugins {
 
 android {
     namespace = "com.android.vpndialogs.stub"
-    compileSdk = 32
+    compileSdk = 33
     buildToolsVersion = "32.0.0"
     defaultConfig {
         minSdk = 30
-        targetSdk = 32
+        targetSdk = 33
     }
 
     compileOptions {

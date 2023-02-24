@@ -21,7 +21,9 @@ jobs:
           java-version: '17'
           cache: 'gradle'
       - name: Build with Gradle
-        run: ./gradlew assemble
+        run: |
+          ./gradlew assemble
+          ./gradlew --stop
       - name: Upload build artifact
         uses: actions/upload-artifact@v3
         with:

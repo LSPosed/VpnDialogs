@@ -53,8 +53,10 @@ public class ConfirmDialog extends AlertActivity
             return;
         }
         if (getSystemService(UserManager.class).hasUserRestriction(UserManager.DISALLOW_CONFIG_VPN)) {
-            finish();
-            return;
+            Log.e(TAG, "User restriction: disallowed configuring a VPN");
+            Log.w(TAG, "Ignore restriction");
+//            finish();
+//            return;
         }
         final String alwaysOnVpnPackage = Settings.Secure.getString(getContentResolver(), ALWAYS_ON_VPN_APP);
         // Can't prepare new vpn app when another vpn is always-on

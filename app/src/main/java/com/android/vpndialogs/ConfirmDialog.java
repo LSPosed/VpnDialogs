@@ -9,7 +9,6 @@ import android.graphics.drawable.Drawable;
 import android.net.VpnManager;
 import android.os.Bundle;
 import android.os.UserManager;
-import android.provider.Settings;
 import android.text.Html;
 import android.text.Html.ImageGetter;
 import android.util.Log;
@@ -29,7 +28,8 @@ public class ConfirmDialog extends AlertActivity
 
     private final int mVpnType;
 
-    private String mPackage;
+    private String mOpPackage;
+    private String mCallingPackage;
 
     private VpnManager mVm;
 
@@ -44,21 +44,30 @@ public class ConfirmDialog extends AlertActivity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mPackage = getCallingPackage();
+        mOpPackage = getOpPackageName();
+        mCallingPackage = getCallingPackage();
         mVm = getSystemService(VpnManager.class);
+        var permission = getApplicationContext().getApplicationInfo().permission;
+        Log.i(TAG,
+                "onCreate: mOpPackage: " + mOpPackage + ", mCallingPackage: " + mCallingPackage + ", permission: " + permission);
 
         if (prepareVpn()) {
+            Log.i(TAG, "prepareVpn succeeded");
             setResult(RESULT_OK);
             finish();
             return;
+        } else {
+            Log.i(TAG, "prepareVpn failed");
         }
         if (getSystemService(UserManager.class).hasUserRestriction(UserManager.DISALLOW_CONFIG_VPN)) {
+            Log.e(TAG, "User restricted, can't configure VPN");
             finish();
             return;
         }
-        final String alwaysOnVpnPackage = Settings.Secure.getString(getContentResolver(), ALWAYS_ON_VPN_APP);
+        final String alwaysOnVpnPackage = Bridge.Setting_getStringForUser(getContentResolver(),
+                ALWAYS_ON_VPN_APP, Bridge.UserHandle_myUserId());
         // Can't prepare new vpn app when another vpn is always-on
-        if (alwaysOnVpnPackage != null && !alwaysOnVpnPackage.equals(mPackage)) {
+        if (alwaysOnVpnPackage != null && !alwaysOnVpnPackage.equals(mCallingPackage)) {
             finish();
             return;
         }
@@ -82,12 +91,12 @@ public class ConfirmDialog extends AlertActivity
 
     private boolean prepareVpn() {
         var userId = Bridge.UserHandle_myUserId();
-        return Bridge.VpnManager_prepareVpn(mVm, mPackage, null, userId);
+        return Bridge.VpnManager_prepareVpn(mVm, mCallingPackage, null, userId);
     }
 
     private CharSequence getVpnLabel() {
         try {
-            return VpnConfig.getVpnLabel(this, mPackage);
+            return VpnConfig.getVpnLabel(this, mCallingPackage);
         } catch (PackageManager.NameNotFoundException e) {
             throw new IllegalStateException(e);
         }
@@ -117,8 +126,9 @@ public class ConfirmDialog extends AlertActivity
     public void onClick(DialogInterface dialog, int which) {
         var userId = Bridge.UserHandle_myUserId();
         try {
-            if (Bridge.VpnManager_prepareVpn(mVm, null, mPackage, userId)) {
-                Bridge.VpnManager_setVpnPackageAuthorization(mVm, mPackage, userId, mVpnType);
+            if (Bridge.VpnManager_prepareVpn(mVm, null, mCallingPackage, userId)) {
+                Bridge.VpnManager_setVpnPackageAuthorization(mVm, mCallingPackage, userId,
+                        mVpnType);
                 setResult(RESULT_OK);
             }
         } catch (Exception e) {

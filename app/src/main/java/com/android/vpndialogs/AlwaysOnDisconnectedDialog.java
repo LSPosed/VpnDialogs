@@ -32,9 +32,8 @@ public class AlwaysOnDisconnectedDialog extends AlertActivity
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        mVpnPackage = Bridge.Setting_getStringForUser(getContentResolver(), ALWAYS_ON_VPN_APP, Bridge.UserHandle_myUserId());
+        mVpnPackage = Settings.Secure.getString(getContentResolver(), ALWAYS_ON_VPN_APP);
         if (mVpnPackage == null) {
-            Log.e(TAG, "Can't get mVpnPackage, exit");
             finish();
             return;
         }
@@ -63,7 +62,7 @@ public class AlwaysOnDisconnectedDialog extends AlertActivity
     @Override
     public void onClick(DialogInterface dialog, int which) {
         switch (which) {
-            case BUTTON_POSITIVE -> {
+            case BUTTON_POSITIVE:
                 PackageManager pm = getPackageManager();
                 final Intent intent = pm.getLaunchIntentForPackage(mVpnPackage);
                 if (intent != null) {
@@ -71,10 +70,12 @@ public class AlwaysOnDisconnectedDialog extends AlertActivity
                     startActivity(intent);
                 }
                 finish();
-            }
-            case BUTTON_NEGATIVE -> finish();
-            default -> {
-            }
+                break;
+            case BUTTON_NEGATIVE:
+                finish();
+                break;
+            default:
+                break;
         }
     }
 

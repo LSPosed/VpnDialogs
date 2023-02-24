@@ -1,6 +1,5 @@
 package org.lsposed.wsa.vpndialogs;
 
-import android.content.ContentResolver;
 import android.net.VpnManager;
 import android.os.UserHandle;
 import android.view.Window;
@@ -36,9 +35,5 @@ public final class Bridge {
 
     public static VpnConfig VpnManager_getVpnConfig(VpnManager vpnManager, int userId) {
         return vpnManager.getVpnConfig(userId);
-    }
-
-    public static String Setting_getStringForUser(ContentResolver cr, String name, int userHandle) {
-        return android.provider.Settings.getStringForUser(cr, name, userHandle);
     }
 }

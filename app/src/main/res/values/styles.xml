@@ -26,4 +26,6 @@
         <item name="android:textSize">18sp</item>
         <item name="android:textStyle">bold</item>
     </style>
+
+    <style name="Theme.DeviceDefault.Dialog.Alert.DayNight" parent="@android:style/Theme.DeviceDefault.Light.Dialog.Alert"/>
 </resources>

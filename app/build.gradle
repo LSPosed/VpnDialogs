@@ -6,6 +6,7 @@ android {
     namespace = "com.android.vpndialogs"
     compileSdk 33
     buildToolsVersion = '34.0.0'
+
     defaultConfig {
         minSdk 33
         targetSdk 33
@@ -13,11 +14,20 @@ android {
         versionName = '13'
     }
 
+    signingConfigs {
+        android {
+            storeFile file('android.jks')
+            storePassword 'android'
+            keyAlias 'android'
+            keyPassword 'android'
+        }
+    }
+
     buildTypes {
         release {
             minifyEnabled = true
             shrinkResources = true
-            signingConfig = signingConfigs.debug
+            signingConfig = signingConfigs.android
             proguardFiles += "proguard-rules.pro"
         }
     }
@@ -32,11 +42,11 @@ android {
         buildConfig = false
     }
 
-
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_17
         targetCompatibility = JavaVersion.VERSION_17
     }
+
     lint {
         checkReleaseBuilds false
     }

@@ -21,11 +21,11 @@ jobs:
 
       - name: Build with Gradle
         run: |
-          ./gradlew assembleRelease
+          ./gradlew assemble --no-daemon
           echo "commit=$(echo ${{ github.sha }} | cut -c-7)" >> $GITHUB_ENV
 
       - name: Upload build artifact
         uses: actions/upload-artifact@v4
         with:
           name: VpnDialogs(${{ env.commit }})
-          path: app/build/outputs/apk/release/app-release.apk
+          path: app/build/outputs/apk/**/app-*.apk

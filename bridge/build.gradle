@@ -8,5 +8,5 @@ java {
 }
 
 dependencies {
-    compileOnly project(":stub")
+    compileOnly project(':stub')
 }

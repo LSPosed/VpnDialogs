@@ -53,7 +53,7 @@ android {
 }
 
 dependencies {
-    compileOnly project(":hidden")
-    compileOnly project(":stub")
-    implementation project(":bridge")
+    compileOnly project(':hidden')
+    compileOnly project(':stub')
+    implementation project(':bridge')
 }

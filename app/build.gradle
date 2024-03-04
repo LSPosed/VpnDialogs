@@ -1,17 +1,18 @@
 plugins {
-    id("com.android.application")
+    id 'com.android.application'
 }
 
 android {
-    namespace = "com.android.vpndialogs"
+    namespace 'com.android.vpndialogs'
     compileSdk 33
-    buildToolsVersion = '34.0.0'
+    buildToolsVersion '34.0.0'
 
     defaultConfig {
         minSdk 33
         targetSdk 33
-        versionCode = 33
-        versionName = '13'
+        versionCode 33
+        versionName '13'
+        proguardFiles += "proguard-rules.pro"
     }
 
     signingConfigs {
@@ -25,15 +26,13 @@ android {
 
     buildTypes {
         debug {
-            minifyEnabled = false
-            signingConfig = signingConfigs.android
-            proguardFiles += "proguard-rules.pro"
+            minifyEnabled false
+            signingConfig signingConfigs.android
         }
         release {
-            minifyEnabled = true
-            shrinkResources = true
-            signingConfig = signingConfigs.android
-            proguardFiles += "proguard-rules.pro"
+            minifyEnabled true
+            shrinkResources true
+            signingConfig signingConfigs.android
         }
     }
 
@@ -43,13 +42,9 @@ android {
         }
     }
 
-    buildFeatures {
-        buildConfig = false
-    }
-
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_17
-        targetCompatibility = JavaVersion.VERSION_17
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
     }
 
     lint {
@@ -58,7 +53,7 @@ android {
 }
 
 dependencies {
-    compileOnly(project(":hidden"))
-    compileOnly(project(":stub"))
-    implementation(project(":bridge"))
+    compileOnly project(":hidden")
+    compileOnly project(":stub")
+    implementation project(":bridge")
 }

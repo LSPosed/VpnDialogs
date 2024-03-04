@@ -1,25 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?><!--suppress AndroidDomInspection -->
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools">
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:ignore="ProtectedPermissions,QueryAllPackagesPermission,DataExtractionRules,MissingApplicationIcon">
 
-    <uses-permission
-        android:name="android.permission.CONTROL_VPN"
-        tools:ignore="ProtectedPermissions" />
-    <uses-permission
-        android:name="android.permission.CONTROL_ALWAYS_ON_VPN"
-        tools:ignore="ProtectedPermissions" />
-    <uses-permission
-        android:name="android.permission.HIDE_NON_SYSTEM_OVERLAY_WINDOWS"
-        tools:ignore="ProtectedPermissions" />
-    <uses-permission
-        android:name="android.permission.QUERY_ALL_PACKAGES"
-        tools:ignore="QueryAllPackagesPermission" />
+    <uses-permission android:name="android.permission.CONTROL_VPN" />
+    <uses-permission android:name="android.permission.CONTROL_ALWAYS_ON_VPN" />
+    <uses-permission android:name="android.permission.HIDE_NON_SYSTEM_OVERLAY_WINDOWS" />
+    <uses-permission android:name="android.permission.QUERY_ALL_PACKAGES" />
 
     <application
         android:allowBackup="false"
         android:label="VpnDialogs"
-        android:usesNonSdkApi="true"
-        tools:ignore="DataExtractionRules,MissingApplicationIcon">
+        android:usesNonSdkApi="true">
 
         <activity
             android:name=".ConfirmDialog"

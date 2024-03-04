@@ -1,18 +1,18 @@
 plugins {
-    id("com.android.library")
+    id 'com.android.library'
 }
 
 android {
-    namespace = "com.android.vpndialogs.stub"
-    compileSdk = 33
-    buildToolsVersion = '34.0.0'
+    namespace 'com.android.vpndialogs.stub'
+    compileSdk 33
+    buildToolsVersion '34.0.0'
     defaultConfig {
-        minSdk = 33
-        targetSdk = 33
+        minSdk 33
+        targetSdk 33
     }
 
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_17
-        targetCompatibility = JavaVersion.VERSION_17
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
     }
 }

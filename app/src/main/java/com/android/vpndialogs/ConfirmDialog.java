@@ -111,6 +111,7 @@ public class ConfirmDialog extends AlertActivity
         return icon;
     }
 
+    @Deprecated
     @Override
     public void onBackPressed() {
     }

@@ -28,6 +28,7 @@ public class AlwaysOnDisconnectedDialog extends AlertActivity
 
     private String mVpnPackage;
 
+    @Deprecated
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -53,7 +54,6 @@ public class AlwaysOnDisconnectedDialog extends AlertActivity
         setupAlert();
 
         Bridge.Window_setCloseOnTouchOutside(getWindow(), false);
-        //noinspection deprecation
         getWindow().setType(android.view.WindowManager.LayoutParams.TYPE_SYSTEM_ALERT);
         getWindow().addFlags(FLAG_ALT_FOCUSABLE_IM);
         Bridge.Window_addPrivateFlags(getWindow(), SYSTEM_FLAG_HIDE_NON_SYSTEM_OVERLAY_WINDOWS);

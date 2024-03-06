@@ -13,6 +13,7 @@ android {
         versionCode 33
         versionName '13'
         proguardFiles += "proguard-rules.pro"
+        multiDexEnabled false
     }
 
     signingConfigs {
